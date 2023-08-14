@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from dimension import display_color_rgb, display_grey
 
 def generate_noise_grey_map(rows=3, cols=3):
-    g_noise = np.random.rand(rows, cols) * 255
+    g_noise = np.random.randint(255, size=(rows, cols))
     return g_noise
 
 def generate_noise_rgb_map(rows=3, cols=3):
@@ -24,7 +24,7 @@ def generate_noise_map(rows=3, cols=3, grey=False):
     return noise
 
 
-def plot_noise(rows=3, cols=3, grey=False, labels=False):
+def plot_noise(rows=3, cols=3, grey=False, labels=False, show_map=True, show_hist=True, bins=100):
 
     noise_map = generate_noise_map(
         rows=rows,
@@ -32,19 +32,35 @@ def plot_noise(rows=3, cols=3, grey=False, labels=False):
         grey=grey,
     )
 
-    fig, ax = plt.subplots()
+    fig, axes = plt.subplots(ncols=2, nrows=1)
+    ax_map = axes[0]
+    ax_hist = axes[1]
 
     cmap = 'Greys' if grey else 'BrBG'
     
     if labels:
         if grey:
-            display_grey(mat=noise_map, ax=ax)
+            display_grey(mat=noise_map, ax=ax_map)
         else:
-            display_color_rgb(mat=noise_map, ax=ax)
+            display_color_rgb(mat=noise_map, ax=ax_map)
 
-    ax.imshow(noise_map, cmap=cmap)
+    if show_map:
+        ax_map.imshow(noise_map, cmap=cmap)
+    
+    if show_hist:
+        hist, bin_edges = np.histogram(noise_map, bins=bins)
+        ax_hist.hist(noise_map, bins=bins)
+    
+    
     plt.show()
 
+
+
+
+
+
+
+
 if __name__ == '__main__':
-    square = 250
-    plot_noise(square,square,grey=False)
+    square = 100
+    plot_noise(square,square,grey=True, bins=10)
