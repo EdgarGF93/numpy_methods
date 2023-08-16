@@ -48,3 +48,13 @@ PSD = fhat * np.conj(fhat) / n
 # plt.plot(freqs, PSD)
 # plt.xlim([0,freqs[int(n / 2)]])
 # plt.show()
+
+
+def rot_matrix(a, degrees=45):
+    # Maximum 45
+    rows = a.shape[0]
+    a_copy = np.copy(a)
+    for row in range(rows):
+        shift = int(row * np.tan(np.radians(degrees)))
+        a_copy[row,:] = np.roll(a_copy[row,:], shift)
+    return a_copy
